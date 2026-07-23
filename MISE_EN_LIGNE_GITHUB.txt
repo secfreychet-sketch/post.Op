@@ -1,0 +1,13 @@
+POST·OP — MISE EN LIGNE SUR GITHUB ET VERCEL
+
+1. Décompressez le fichier ZIP.
+2. Sur GitHub, créez un nouveau repository nommé postop-site.
+3. Dans ce repository, cliquez sur Add file > Upload files.
+4. Sélectionnez tous les fichiers et le dossier vendor du dossier décompressé.
+5. Ne chargez pas le fichier ZIP lui-même.
+6. Cliquez sur Commit changes.
+7. Dans Vercel, cliquez sur Add New > Project, puis importez postop-site.
+8. Aucun Build Command n'est nécessaire : le site est statique.
+9. Cliquez sur Deploy.
+
+À chaque modification envoyée sur GitHub, Vercel redéploiera automatiquement le site.
