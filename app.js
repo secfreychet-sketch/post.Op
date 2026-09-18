@@ -1307,28 +1307,48 @@ function App() {
       style: {
         fontSize: 46,
         fontWeight: 700,
-        letterSpacing: "-0.035em",
+        letterSpacing: "-0.02em",
         lineHeight: 1,
-        display: "flex",
-        alignItems: "center",
-        gap: 7
+        display: "inline-flex",
+        alignItems: "baseline",
+        gap: 0,
+        whiteSpace: "nowrap"
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        color: "#FFFFFF"
+        color: C.blue,
+        fontSize: "1.30em",
+        lineHeight: .8,
+        fontWeight: 700
       }
-    }, "POST"), /*#__PURE__*/React.createElement("span", {
+    }, "P"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#FFFFFF",
+        fontSize: ".78em",
+        fontWeight: 600
+      }
+    }, "OST"), /*#__PURE__*/React.createElement("span", {
       "aria-hidden": "true",
       style: {
         color: C.blue,
-        fontSize: 34,
-        lineHeight: 1
+        fontSize: ".78em",
+        fontWeight: 700,
+        margin: "0 .04em"
       }
     }, "·"), /*#__PURE__*/React.createElement("span", {
       style: {
-        color: C.blue
+        color: C.blue,
+        fontSize: "1.30em",
+        lineHeight: .8,
+        fontWeight: 700
       }
-    }, "OP")), /*#__PURE__*/React.createElement("div", {
+    }, "O"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#FFFFFF",
+        fontSize: ".78em",
+        fontWeight: 600
+      }
+    }, "P")), /*#__PURE__*/React.createElement("div", {
       style: {
         color: "#C9C7CB",
         fontSize: 14.5,
@@ -2728,26 +2748,47 @@ function App() {
     style: {
       fontWeight: 700,
       fontSize: 24,
-      letterSpacing: "-0.025em",
-      display: "flex",
-      alignItems: "center",
-      gap: 4
+      letterSpacing: "-0.02em",
+      display: "inline-flex",
+      alignItems: "baseline",
+      gap: 0,
+      whiteSpace: "nowrap"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      color: "#FFFFFF"
+      color: C.blue,
+      fontSize: "1.30em",
+      lineHeight: .8,
+      fontWeight: 700
     }
-  }, "POST"), /*#__PURE__*/React.createElement("span", {
+  }, "P"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#FFFFFF",
+      fontSize: ".78em",
+      fontWeight: 600
+    }
+  }, "OST"), /*#__PURE__*/React.createElement("span", {
     "aria-hidden": "true",
     style: {
       color: C.blue,
-      fontSize: 18
+      fontSize: ".78em",
+      fontWeight: 700,
+      margin: "0 .04em"
     }
   }, "·"), /*#__PURE__*/React.createElement("span", {
     style: {
-      color: C.blue
+      color: C.blue,
+      fontSize: "1.30em",
+      lineHeight: .8,
+      fontWeight: 700
     }
-  }, "OP")), /*#__PURE__*/React.createElement("div", {
+  }, "O"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#FFFFFF",
+      fontSize: ".78em",
+      fontWeight: 600
+    }
+  }, "P")), /*#__PURE__*/React.createElement("div", {
     style: {
       color: "#C9C7CB",
       fontSize: 11,
