@@ -504,10 +504,12 @@ function App(){
       style={{position:"absolute",right:"-15%",bottom:"-5%",width:"86%",maxWidth:450,opacity:0.68,pointerEvents:"none"}}/>
     <div style={{position:"relative",padding:"52px 24px 40px",maxWidth:460}}>
      <img src="santy-white.png" alt="Santy" style={{height:44,marginBottom:34}}/>
-     <div className="disp" aria-label="POST point OP" style={{fontSize:46,fontWeight:700,letterSpacing:"-0.035em",lineHeight:1,display:"flex",alignItems:"center",gap:7}}>
-      <span style={{color:"#FFFFFF"}}>POST</span>
-      <span aria-hidden="true" style={{color:C.blue,fontSize:34,lineHeight:1}}>·</span>
-      <span style={{color:C.blue}}>OP</span>
+     <div className="disp" aria-label="POST point OP" style={{fontSize:46,fontWeight:700,letterSpacing:"-0.02em",lineHeight:1,display:"inline-flex",alignItems:"baseline",gap:0,whiteSpace:"nowrap"}}>
+      <span style={{color:C.blue,fontSize:"1.30em",lineHeight:.8,fontWeight:700}}>P</span>
+      <span style={{color:"#FFFFFF",fontSize:".78em",fontWeight:600}}>OST</span>
+      <span aria-hidden="true" style={{color:C.blue,fontSize:".78em",fontWeight:700,margin:"0 .04em"}}>·</span>
+      <span style={{color:C.blue,fontSize:"1.30em",lineHeight:.8,fontWeight:700}}>O</span>
+      <span style={{color:"#FFFFFF",fontSize:".78em",fontWeight:600}}>P</span>
      </div>
      <div style={{color:"#C9C7CB",fontSize:14.5,marginTop:12,lineHeight:1.55}}>
       De la préparation chirurgicale jusqu’au retour au sport.
@@ -943,10 +945,12 @@ function App(){
    <div style={{background:C.deep,borderBottom:"1px solid #343136",padding:"12px 16px"}}>
     <div className="row" style={{alignItems:"center",justifyContent:"space-between"}}>
      <div>
-      <div className="disp" aria-label="POST point OP" style={{fontWeight:700,fontSize:24,letterSpacing:"-0.025em",display:"flex",alignItems:"center",gap:4}}>
-       <span style={{color:"#FFFFFF"}}>POST</span>
-       <span aria-hidden="true" style={{color:C.blue,fontSize:18}}>·</span>
-       <span style={{color:C.blue}}>OP</span>
+      <div className="disp" aria-label="POST point OP" style={{fontWeight:700,fontSize:24,letterSpacing:"-0.02em",display:"inline-flex",alignItems:"baseline",gap:0,whiteSpace:"nowrap"}}>
+       <span style={{color:C.blue,fontSize:"1.30em",lineHeight:.8,fontWeight:700}}>P</span>
+       <span style={{color:"#FFFFFF",fontSize:".78em",fontWeight:600}}>OST</span>
+       <span aria-hidden="true" style={{color:C.blue,fontSize:".78em",fontWeight:700,margin:"0 .04em"}}>·</span>
+       <span style={{color:C.blue,fontSize:"1.30em",lineHeight:.8,fontWeight:700}}>O</span>
+       <span style={{color:"#FFFFFF",fontSize:".78em",fontWeight:600}}>P</span>
       </div>
       <div style={{color:"#C9C7CB",fontSize:11,marginTop:3,lineHeight:1.4}}>De la préparation chirurgicale au retour au sport</div>
       <div style={{color:"#9D9AA0",fontSize:11,marginTop:4,fontWeight:600}}>
