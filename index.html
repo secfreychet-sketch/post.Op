@@ -16,6 +16,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 <script src="vendor/react.production.min.js"></script>
 <script src="vendor/react-dom.production.min.js"></script>
+<script>
+/* Correctif : app.js appelait useMemo uniquement après l'écran d'accueil,
+   ce qui changeait l'ordre des hooks React au clic sur « Commencer » et faisait planter l'application.
+   Les deux useMemo concernés ne servent qu'à calculer des listes : on les rend donc non-hook. */
+React.useMemo = function(factory){ return factory(); };
+</script>
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
