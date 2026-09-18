@@ -2,7 +2,7 @@
    Met l'application en cache pour qu'elle fonctionne sans réseau.
    Incrémenter VERSION à chaque mise à jour du contenu. */
 
-const VERSION = "postop-v7-correctif";
+const VERSION = "postop-v8-reference";
 const FILES = [
   "./",
   "./index.html",
