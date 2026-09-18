@@ -2,7 +2,7 @@
    Met l'application en cache pour qu'elle fonctionne sans réseau.
    Incrémenter VERSION à chaque mise à jour du contenu. */
 
-const VERSION = "postop-v8-reference";
+const VERSION = "postop-v9-hooks-fix";
 const FILES = [
   "./",
   "./index.html",
@@ -36,7 +36,6 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
 
-  // Réseau d'abord pour la page : le patient voit toujours la dernière version des consignes.
   if (req.mode === "navigate") {
     e.respondWith(
       fetch(req)
@@ -50,7 +49,6 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Cache d'abord pour le reste (rapide, et fonctionne hors ligne).
   e.respondWith(
     caches.match(req).then((hit) => hit || fetch(req).then((r) => {
       if (r && r.status === 200 && r.type === "basic") {
