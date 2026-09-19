@@ -1428,6 +1428,7 @@ function App() {
   const dec = po.suture === true ? 45 : 0;
   const sports = SPORTS.map(s => s[0] !== null && s[3] && dec ? [s[0] + dec, s[1], s[2], s[3], true] : s).filter(s => s[1].toLowerCase().includes(q.toLowerCase())).sort((a, b) => (a[0] ?? 9999) - (b[0] ?? 9999));
   const needPo = day >= 0 && (po.suture === null || po.hbpm === null);
+  const FAQPanel = window.FAQPanel;
 
   /* ---------- Aujourd'hui ---------- */
   const Today = /*#__PURE__*/React.createElement("div", {
@@ -2262,6 +2263,14 @@ function App() {
     }, cible ? "✓ Mon objectif" : "En faire mon objectif")));
   })));
 
+  /* ---------- FAQ ---------- */
+  const FAQ = /*#__PURE__*/React.createElement(FAQPanel, {
+    C: C,
+    Card: Card,
+    Eyebrow: Eyebrow,
+    IcSearch: IcSearch
+  });
+
   /* ---------- Infos ---------- */
   const Infos = /*#__PURE__*/React.createElement("div", {
     className: "col",
@@ -2641,7 +2650,7 @@ function App() {
       textDecoration: "underline"
     }
   }, "Réinitialiser l'application"))));
-  const TABS = [["today", "Aujourd'hui", IcCal], ["list", "Check-list", IcList], ["meds", "Traitement", IcPill], ["sport", "Sport", IcAct], ["sos", "Infos", IcInfo]];
+  const TABS = [["today", "Aujourd'hui", IcCal], ["list", "Check-list", IcList], ["meds", "Traitement", IcPill], ["sport", "Sport", IcAct], ["faq", "FAQ", IcSearch], ["sos", "Infos", IcInfo]];
   return /*#__PURE__*/React.createElement("div", {
     style: {
       minHeight: "100vh",
@@ -2814,7 +2823,7 @@ function App() {
     style: {
       padding: 12
     }
-  }, tab === "today" && Today, tab === "list" && List, tab === "meds" && Meds, tab === "sport" && Sport, tab === "sos" && Infos), /*#__PURE__*/React.createElement("div", {
+  }, tab === "today" && Today, tab === "list" && List, tab === "meds" && Meds, tab === "sport" && Sport, tab === "faq" && FAQ, tab === "sos" && Infos), /*#__PURE__*/React.createElement("div", {
     style: {
       position: "fixed",
       bottom: 0,
