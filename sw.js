@@ -2,14 +2,14 @@
    Met l'application en cache pour qu'elle fonctionne sans réseau.
    Incrémenter VERSION à chaque mise à jour du contenu. */
 
-const VERSION = "postop-v12-objectives";
+const VERSION = "postop-v13-objectives-criteria";
 const FILES = [
   "./",
   "./index.html",
   "./app.js?v=12",
   "./faq-data.js?v=12",
   "./faq-ui.js?v=12",
-  "./objectives-ui.js?v=12",
+  "./objectives-ui.js?v=13",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
