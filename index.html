@@ -6,7 +6,7 @@
 <title>POST·OP — Dr Benjamin Freychet</title>
 <meta name="description" content="De la préparation chirurgicale jusqu’au retour au sport." />
 <meta name="theme-color" content="#1A1819" />
-<meta name="postop-build" content="v11-faq" />
+<meta name="postop-build" content="v12-objectives" />
 <link rel="manifest" href="manifest.json" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-<script src="react.production.min.js?v=11"></script>
-<script src="react-dom.production.min.js?v=11"></script>
+<script src="react.production.min.js?v=12"></script>
+<script src="react-dom.production.min.js?v=12"></script>
 <script>
 /* Correctif : app.js appelait useMemo uniquement après l'écran d'accueil,
    ce qui changeait l'ordre des hooks React au clic sur « Commencer » et faisait planter l'application.
@@ -40,9 +40,10 @@ React.useMemo = function(factory){ return factory(); };
 <body>
 <div id="root"></div>
 
-<script src="faq-data.js?v=11"></script>
-<script src="faq-ui.js?v=11"></script>
-<script src="app.js?v=11"></script>
+<script src="faq-data.js?v=12"></script>
+<script src="faq-ui.js?v=12"></script>
+<script src="objectives-ui.js?v=12"></script>
+<script src="app.js?v=12"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
