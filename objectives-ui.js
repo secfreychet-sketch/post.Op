@@ -6,15 +6,16 @@
   const PHASES = [
     {
       n:1,
-      title:"Genou calme",
-      goal:"Calmer le genou, récupérer l’extension et réveiller le quadriceps.",
+      title:"Extension symétrique & quadriceps actif",
+      goal:"Conserver dès le postopératoire immédiat l’extension physiologique complète et strictement symétrique au côté sain, et obtenir un quadriceps totalement actif sans AMI.",
       criteria:[
-        "Extension complète du genou (0°)",
-        "Genou sec ou seulement très peu gonflé",
-        "Douleur suffisamment maîtrisée pour travailler correctement",
-        "Quadriceps actif avec bon verrouillage du genou"
+        "Extension physiologique strictement symétrique au côté sain dès le postopératoire immédiat — y compris le recurvatum habituel du patient",
+        "Extension conservée en permanence : aucune perte d’extension au fil des jours",
+        "Quadriceps complètement actif, en particulier le vaste interne, sans AMI (Arthrogenic Muscle Inhibition)",
+        "À la contraction du quadriceps : le genou reste au contact du sol et le talon se soulève spontanément",
+        "Douleur et gonflement suffisamment maîtrisés pour permettre ce travail correctement"
       ],
-      pro:"On cherche d’abord un genou calme, une extension complète et un quadriceps qui se contracte correctement."
+      pro:"La référence n’est pas 0° pour tous les patients : c’est le genou controlatéral. Si le côté sain est à –15°, l’objectif postopératoire immédiat est –15° du côté opéré, puis de conserver cette extension. Il ne faut pas attendre de la « récupérer » plus tard."
     },
     {
       n:2,
@@ -227,6 +228,16 @@
               h(Eyebrow,{color:C.blue},"Objectif"),
               h("div",{style:{fontWeight:700,color:C.ink,fontSize:14,marginTop:6,lineHeight:1.45}},phase.goal)
             ),
+
+            phase.n===1?h("div",{style:{
+              marginTop:10,background:C.redSoft,border:"1px solid #EDCACA",
+              borderRadius:10,padding:"10px 11px",fontSize:12.3,color:C.ink,lineHeight:1.5
+            }},
+              h("div",{style:{fontWeight:800,color:C.red,marginBottom:4}},"Priorité absolue des 3 premières semaines"),
+              h("div",null,
+                "L’extension ne doit pas être « récupérée » secondairement : elle doit être présente dès le postopératoire immédiat et conservée à tout prix, en miroir du genou sain. Lors de la contraction, le vaste interne doit être actif, le genou reste au sol et le talon se lève."
+              )
+            ):null,
 
             h("div",{style:{marginTop:13}},
               h(Eyebrow,null,"À acquérir"),
