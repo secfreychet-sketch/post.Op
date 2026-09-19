@@ -2,7 +2,7 @@
    Met l'application en cache pour qu'elle fonctionne sans réseau.
    Incrémenter VERSION à chaque mise à jour du contenu. */
 
-const VERSION = "postop-v14-phase1-rigorous";
+const VERSION = "postop-v16-checklist-expiry";
 const FILES = [
   "./",
   "./index.html",
@@ -10,6 +10,7 @@ const FILES = [
   "./faq-data.js?v=12",
   "./faq-ui.js?v=12",
   "./objectives-ui.js?v=14",
+  "./expiry-filter.js?v=16",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
