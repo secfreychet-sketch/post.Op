@@ -1,131 +1,333 @@
-/* Objectifs postop à partir de J15 */
+/* Objectifs de rééducation LCA à partir de J15 — progression par critères */
 (function(){
-  const { useState, useMemo, useEffect } = React;
+  const { useState, useEffect } = React;
   const h = React.createElement;
 
-  const STAGES = [
-    {day:21,label:"3 semaines",title:"Premier contrôle",items:[
-      "Extension complète",
-      "Marche sans flessum",
-      "Contraction du quadriceps correcte avec verrouillage",
-      "Cicatrices propres"
-    ]},
-    {day:42,label:"6 semaines",title:"Deuxième étape",items:[
-      "Marche correcte sans canne",
-      "Flexion supérieure à 90°",
-      "Rodage articulaire sur vélo si les objectifs sont atteints"
-    ]},
-    {day:90,label:"3 mois",title:"Récupération fonctionnelle",items:[
-      "Extension et flexion complètes",
-      "Genou sans épanchement",
-      "Renforcement du quadriceps et des ischio-jambiers",
-      "Début de la proprioception",
-      "Reprise de la course à pied"
-    ]},
-    {day:180,label:"6 mois",title:"Évaluation avant reprise sportive",items:[
-      "Test isocinétique",
-      "Test K-STARTS",
-      "Reprise de l’entraînement en sports pivots selon les résultats des tests"
-    ]}
+  const PHASES = [
+    {
+      n:1,
+      title:"Genou calme",
+      goal:"Calmer le genou, récupérer l’extension et réveiller le quadriceps.",
+      criteria:[
+        "Extension complète du genou (0°)",
+        "Genou sec ou seulement très peu gonflé",
+        "Douleur suffisamment maîtrisée pour travailler correctement",
+        "Quadriceps actif avec bon verrouillage du genou"
+      ],
+      pro:"On cherche d’abord un genou calme, une extension complète et un quadriceps qui se contracte correctement."
+    },
+    {
+      n:2,
+      title:"Marche normale",
+      goal:"Retrouver une marche fluide et une mobilité suffisante.",
+      criteria:[
+        "Extension complète conservée",
+        "Flexion supérieure à 120°",
+        "Marche sans boiterie et sans flessum",
+        "Pas d’épanchement significatif",
+        "Extension active complète, sans déficit de verrouillage"
+      ],
+      pro:"La qualité de la marche compte plus que la distance parcourue."
+    },
+    {
+      n:3,
+      title:"Force de base",
+      goal:"Reconstruire la force, la stabilité et le contrôle sur une jambe.",
+      criteria:[
+        "Squat unipodal réalisé avec un bon alignement",
+        "Bassin, genou et pied bien contrôlés pendant les exercices",
+        "Force et endurance unipodales proches du côté sain, contrôlées avec le kiné",
+        "Pas de gonflement réactionnel après les séances"
+      ],
+      pro:"La charge augmente progressivement seulement si le genou reste calme après l’effort."
+    },
+    {
+      n:4,
+      title:"Préparer la course",
+      goal:"Atteindre les critères nécessaires avant de débuter une reprise progressive de la course.",
+      criteria:[
+        "Extension complète",
+        "Flexion au moins égale à 95 % du côté sain",
+        "Absence d’épanchement ou simple trace",
+        "Force du quadriceps au moins égale à 80 % du côté sain",
+        "Sautillements sur une jambe sans douleur et avec bon contrôle"
+      ],
+      pro:"Une date seule n’autorise jamais la course : il faut également que le genou remplisse les critères fonctionnels."
+    },
+    {
+      n:5,
+      title:"Réathlétisation",
+      goal:"Transformer la force retrouvée en capacités dynamiques : courir, freiner, sauter et changer de direction.",
+      criteria:[
+        "Programme de reprise de course terminé sans réaction du genou",
+        "Réceptions de saut stables et bien contrôlées",
+        "Single Leg Hop Test ≥ 90 % du côté sain",
+        "Triple Hop Test ≥ 90 % du côté sain",
+        "Cross Over Hop Test ≥ 90 % du côté sain",
+        "Side Hop Test ≥ 90 % du côté sain"
+      ],
+      pro:"On recherche la qualité du mouvement autant que la performance brute."
+    },
+    {
+      n:6,
+      title:"Retour au sport",
+      goal:"Vérifier que le genou est prêt pour les contraintes réelles de votre sport.",
+      criteria:[
+        "Bilan isocinétique réalisé et interprété",
+        "K-STARTS réalisé et interprété par l’équipe",
+        "Course, sauts, freinages et changements de direction bien tolérés",
+        "Gestes spécifiques du sport repris progressivement",
+        "Confiance suffisante dans le genou",
+        "Retour au sport validé par l’équipe médicale"
+      ],
+      pro:"L’isocinétique et le K-STARTS complètent l’examen clinique. Aucun test isolé ne suffit à autoriser le retour au sport."
+    }
   ];
 
+  function emptyState(){
+    return {current:1,checked:{},validated:{},completed:{},kine:false,regular:false};
+  }
   function storeGet(){
     try{
-      const raw=localStorage.getItem("postop_goals");
-      return raw?JSON.parse(raw):{};
-    }catch(e){return {}}
+      const raw=localStorage.getItem("postop_goals_v2");
+      const x=raw?JSON.parse(raw):emptyState();
+      return Object.assign(emptyState(),x,{current:Math.min(6,Math.max(1,Number(x.current)||1))});
+    }catch(e){return emptyState()}
   }
 
   window.ObjectivesPanel = function ObjectivesPanel({day,dateOp,po,C,Card,Eyebrow,IcCheck,addD,sh}){
-    const [goals,setGoals]=useState(storeGet);
+    const [state,setState]=useState(storeGet);
+    const [open,setOpen]=useState(()=>storeGet().current);
+
     useEffect(()=>{
-      try{localStorage.setItem("postop_goals",JSON.stringify(goals))}catch(e){}
-    },[goals]);
+      try{localStorage.setItem("postop_goals_v2",JSON.stringify(state))}catch(e){}
+    },[state]);
 
-    const total=STAGES.reduce((n,s)=>n+s.items.length,0);
-    const done=STAGES.reduce((n,s)=>n+s.items.filter((_,i)=>goals[s.day+"-"+i]).length,0);
-    const pct=total?Math.round(done/total*100):0;
-
-    const currentIndex=STAGES.findIndex(s=>day<s.day);
-    const current=currentIndex===-1?STAGES[STAGES.length-1]:STAGES[currentIndex];
-
-    const textFor=(stage,item)=>{
-      if(stage.day===90 && item==="Reprise de la course à pied" && po && po.suture===true){
-        return "Course à pied : reprise à 4 mois et demi en cas de suture méniscale";
-      }
-      return item;
+    const toggleCriterion=(phase,index)=>{
+      const key=phase+"-"+index;
+      setState(s=>Object.assign({},s,{checked:Object.assign({},s.checked,{[key]:!s.checked[key]})}));
+    };
+    const allCriteriaDone=(phase)=>{
+      const p=PHASES[phase-1];
+      return p.criteria.every((_,i)=>!!state.checked[phase+"-"+i]);
+    };
+    const canAdvance=(phase)=>{
+      return !!state.kine && !!state.regular && !!state.validated[phase] && allCriteriaDone(phase);
+    };
+    const validatePhase=(phase)=>{
+      if(!canAdvance(phase)) return;
+      setState(s=>({
+        ...s,
+        completed:Object.assign({},s.completed,{[phase]:true}),
+        current:phase<6?phase+1:6
+      }));
+      if(phase<6) setOpen(phase+1);
     };
 
+    const completedCount=PHASES.filter(p=>state.completed[p.n]).length;
+    const pct=Math.round(completedCount/6*100);
+
     return h("div",{className:"col",style:{gap:12}},
+
       h("div",{style:{background:C.deep,borderRadius:18,padding:"20px 18px",color:"#fff"}},
         h(Eyebrow,{color:"#9B99A0"},"Mes objectifs"),
-        h("div",{className:"disp",style:{fontWeight:600,fontSize:22,marginTop:8,lineHeight:1.25}},"Les étapes de votre récupération"),
-        h("div",{style:{color:"#C9C7CB",fontSize:13,marginTop:7,lineHeight:1.5}},
-          day<current.day
-            ? "Prochaine étape : "+current.label+" · "+sh(addD(dateOp,current.day))
-            : "Suivez vos objectifs avec votre médecin du sport."),
+        h("div",{className:"disp",style:{fontWeight:600,fontSize:22,marginTop:8,lineHeight:1.25}},
+          "Progression par objectifs, pas par dates"),
+        h("div",{style:{color:"#C9C7CB",fontSize:13,marginTop:8,lineHeight:1.5}},
+          "On passe à la phase suivante lorsque la phase actuelle est globalement acquise et validée avec le kinésithérapeute. Le temps écoulé seul ne suffit pas."
+        ),
         h("div",{style:{marginTop:15,height:8,borderRadius:8,background:"#38363A",overflow:"hidden"}},
           h("div",{style:{height:"100%",width:pct+"%",background:C.blue,borderRadius:8,transition:"width .4s ease"}})
         ),
         h("div",{className:"row",style:{justifyContent:"space-between",marginTop:7}},
-          h("span",{style:{fontSize:11.5,color:"#9B99A0",fontWeight:700}},done+" / "+total+" objectifs"),
+          h("span",{style:{fontSize:11.5,color:"#9B99A0",fontWeight:700}},completedCount+" / 6 phases acquises"),
           h("span",{style:{fontSize:11.5,color:"#9B99A0",fontWeight:700}},pct+" %")
         )
       ),
 
-      STAGES.map(stage=>{
-        const reached=day>=stage.day;
-        const nb=stage.items.filter((_,i)=>goals[stage.day+"-"+i]).length;
-        const complete=nb===stage.items.length;
-        return h(Card,{key:stage.day,style:{
-          borderColor:complete?C.green:reached?C.blueLine:C.line,
-          opacity:reached?1:.78,
-          overflow:"hidden"
-        }},
-          h("div",{style:{padding:"15px 16px 10px"}},
-            h("div",{className:"row",style:{justifyContent:"space-between",alignItems:"flex-start",gap:10}},
-              h("div",null,
-                h(Eyebrow,{color:complete?C.green:C.blue},stage.label),
-                h("div",{style:{fontWeight:700,color:C.ink,fontSize:15,marginTop:5}},stage.title),
-                h("div",{style:{color:C.muted,fontSize:12,marginTop:3}},
-                  (reached?"À partir du ":"Prévu le ")+sh(addD(dateOp,stage.day)))
-              ),
-              h("div",{style:{color:complete?C.green:C.muted,fontSize:12.5,fontWeight:700}},nb+"/"+stage.items.length)
-            )
+      h(Card,null,
+        h("div",{style:{padding:16}},
+          h(Eyebrow,null,"Ma rééducation"),
+          h("div",{style:{color:C.muted,fontSize:13,marginTop:7,lineHeight:1.5}},
+            "La chirurgie ne suffit pas : la récupération du genou nécessite une rééducation régulière, adaptée à votre évolution."
           ),
-          stage.items.map((item,i)=>{
-            const key=stage.day+"-"+i;
-            const checked=!!goals[key];
-            return h("button",{
-              key,
-              onClick:()=>setGoals(g=>Object.assign({},g,{[key]:!g[key]})),
-              className:"row",
-              style:{gap:11,padding:"11px 16px",width:"100%",borderTop:"1px solid "+C.line,alignItems:"flex-start",background:"#fff"}
-            },
-              h("span",{style:{
-                flexShrink:0,width:22,height:22,marginTop:1,borderRadius:7,
-                border:"1.5px solid "+(checked?C.green:C.line),
-                background:checked?C.green:"#fff",
-                display:"flex",alignItems:"center",justifyContent:"center"
-              }},checked?h(IcCheck,{size:13,color:"#fff",sw:3}):null),
-              h("span",{style:{
-                flex:1,color:checked?C.muted:C.ink,fontSize:13.5,lineHeight:1.45,
-                textDecoration:checked?"line-through":"none"
-              }},textFor(stage,item))
-            );
-          })
+          h("button",{
+            onClick:()=>setState(s=>Object.assign({},s,{kine:!s.kine})),
+            style:{
+              width:"100%",marginTop:12,padding:"11px 12px",borderRadius:11,textAlign:"left",
+              border:"1.5px solid "+(state.kine?C.green:C.line),
+              background:state.kine?"#EDF8F3":"#fff",fontSize:13.5,fontWeight:700,color:C.ink
+            }
+          },(state.kine?"✓ ":"○ ")+"Je suis suivi(e) par un kinésithérapeute"),
+          h("button",{
+            onClick:()=>setState(s=>Object.assign({},s,{regular:!s.regular})),
+            style:{
+              width:"100%",marginTop:8,padding:"11px 12px",borderRadius:11,textAlign:"left",
+              border:"1.5px solid "+(state.regular?C.green:C.line),
+              background:state.regular?"#EDF8F3":"#fff",fontSize:13.5,fontWeight:700,color:C.ink
+            }
+          },(state.regular?"✓ ":"○ ")+"Je réalise régulièrement les exercices prescrits")
+        )
+      ),
+
+      po&&po.suture===true?h(Card,{style:{background:C.amberSoft,borderColor:"#E7C38F"}},
+        h("div",{style:{padding:14,color:C.amber,fontSize:12.5,lineHeight:1.5}},
+          h("b",null,"Suture méniscale associée : "),
+          "certaines étapes sont volontairement retardées. Les consignes spécifiques données par le chirurgien et votre kinésithérapeute priment toujours."
+        )
+      ):null,
+
+      h("div",{className:"row",style:{gap:6,overflowX:"auto",padding:"2px 0 3px"}},
+        PHASES.map(p=>{
+          const done=!!state.completed[p.n], current=state.current===p.n;
+          return h("button",{key:p.n,onClick:()=>setOpen(p.n),style:{
+            minWidth:42,height:38,borderRadius:20,textAlign:"center",fontWeight:800,flexShrink:0,
+            border:"1.5px solid "+(current?C.blue:done?C.green:C.line),
+            background:current?C.blue:done?"#EDF8F3":"#fff",
+            color:current?"#fff":done?C.green:C.muted
+          }},done?"✓":p.n);
+        })
+      ),
+
+      PHASES.map(phase=>{
+        const isOpen=open===phase.n;
+        const current=state.current===phase.n;
+        const done=!!state.completed[phase.n];
+        const locked=phase.n>state.current;
+        const ready=canAdvance(phase.n);
+        const allDone=allCriteriaDone(phase.n);
+
+        return h(Card,{key:phase.n,style:{
+          overflow:"hidden",
+          borderColor:current?C.blue:done?C.green:C.line,
+          borderWidth:current?2:1,
+          opacity:locked?.78:1
+        }},
+          h("button",{onClick:()=>setOpen(isOpen?0:phase.n),style:{
+            width:"100%",padding:"14px 15px",display:"flex",gap:11,alignItems:"center",textAlign:"left",
+            background:current?C.blueSoft:done?"#EDF8F3":"#fff"
+          }},
+            h("span",{style:{
+              width:32,height:32,borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",
+              background:current?C.blue:done?C.green:C.paper,
+              color:current||done?"#fff":C.muted,fontWeight:800,flexShrink:0
+            }},done?"✓":phase.n),
+            h("span",{style:{flex:1}},
+              h("span",{style:{display:"block",fontWeight:800,color:C.ink,fontSize:15}},
+                "Phase "+phase.n+" · "+phase.title),
+              h("span",{style:{display:"block",fontSize:12,marginTop:2,fontWeight:700,
+                color:current?C.blue:done?C.green:C.muted}},
+                done?"Acquise":current?"Phase actuelle":"À venir")
+            ),
+            h("span",{style:{fontSize:18,color:C.muted}},isOpen?"⌃":"⌄")
+          ),
+
+          isOpen?h("div",{style:{padding:"0 15px 15px"}},
+            h("div",{style:{marginTop:12,background:C.paper,borderRadius:11,padding:"11px 12px"}},
+              h(Eyebrow,{color:C.blue},"Objectif"),
+              h("div",{style:{fontWeight:700,color:C.ink,fontSize:14,marginTop:6,lineHeight:1.45}},phase.goal)
+            ),
+
+            h("div",{style:{marginTop:13}},
+              h(Eyebrow,null,"À acquérir"),
+              h("div",{style:{marginTop:7,border:"1px solid "+C.line,borderRadius:12,overflow:"hidden"}},
+                phase.criteria.map((item,i)=>{
+                  const key=phase.n+"-"+i;
+                  const checked=!!state.checked[key];
+                  return h("button",{
+                    key,
+                    disabled:locked,
+                    onClick:()=>toggleCriterion(phase.n,i),
+                    className:"row",
+                    style:{
+                      gap:10,padding:"11px 12px",width:"100%",alignItems:"flex-start",textAlign:"left",
+                      borderTop:i?"1px solid "+C.line:"none",background:"#fff",opacity:locked?.62:1
+                    }
+                  },
+                    h("span",{style:{
+                      width:22,height:22,borderRadius:7,flexShrink:0,marginTop:1,
+                      border:"1.5px solid "+(checked?C.green:C.line),
+                      background:checked?C.green:"#fff",
+                      display:"flex",alignItems:"center",justifyContent:"center"
+                    }},checked?h(IcCheck,{size:13,color:"#fff",sw:3}):null),
+                    h("span",{style:{
+                      color:checked?C.muted:C.ink,fontSize:13.2,lineHeight:1.45,
+                      textDecoration:checked?"line-through":"none"
+                    }},item)
+                  );
+                })
+              )
+            ),
+
+            h("div",{style:{
+              marginTop:10,background:C.blueSoft,border:"1px solid "+C.blueLine,
+              borderRadius:10,padding:"9px 11px",fontSize:12.2,color:C.ink,lineHeight:1.5
+            }},
+              h("b",null,"Repère : "),phase.pro
+            ),
+
+            phase.n===4&&po&&po.suture===true?h("div",{style:{
+              marginTop:9,background:C.amberSoft,borderRadius:9,padding:"9px 11px",
+              color:C.amber,fontSize:12.2,lineHeight:1.45,fontWeight:600
+            }},"En cas de suture méniscale, la reprise de la course est décalée selon les consignes spécifiques de votre parcours."):null,
+
+            current?h("div",{style:{marginTop:13,borderTop:"1px solid "+C.line,paddingTop:12}},
+              h("button",{
+                onClick:()=>setState(s=>Object.assign({},s,{validated:Object.assign({},s.validated,{[phase.n]:!s.validated[phase.n]})})),
+                style:{
+                  width:"100%",padding:"11px 12px",borderRadius:11,textAlign:"left",
+                  border:"1.5px solid "+(state.validated[phase.n]?C.green:C.line),
+                  background:state.validated[phase.n]?"#EDF8F3":"#fff",
+                  fontSize:13.2,fontWeight:700,color:C.ink
+                }
+              },(state.validated[phase.n]?"✓ ":"○ ")+"Cette phase a été revue et validée avec mon kiné"),
+
+              h("button",{
+                disabled:!ready,
+                onClick:()=>validatePhase(phase.n),
+                style:{
+                  width:"100%",marginTop:9,padding:"12px 14px",borderRadius:11,textAlign:"center",
+                  background:ready?C.blue:C.line,color:ready?"#fff":C.muted,
+                  fontSize:14,fontWeight:800
+                }
+              },phase.n===6?"Valider mon parcours":"Valider et passer à la phase "+(phase.n+1)),
+
+              !ready?h("div",{style:{fontSize:11.5,color:C.muted,lineHeight:1.45,marginTop:7}},
+                !state.kine||!state.regular
+                  ?"Le suivi kiné et les exercices réguliers doivent d’abord être confirmés."
+                  :!allDone
+                    ?"Tous les critères de cette phase ne sont pas encore acquis."
+                    :"La validation avec votre kinésithérapeute est encore nécessaire."
+              ):null
+            ):null,
+
+            locked?h("div",{style:{
+              marginTop:11,background:C.paper,borderRadius:9,padding:"9px 11px",
+              fontSize:12,color:C.muted,lineHeight:1.45
+            }},"Vous pouvez consulter cette phase, mais elle ne se valide qu’après acquisition de la phase précédente."):null
+          ):null
         );
       }),
 
       h(Card,{style:{borderStyle:"dashed"}},
         h("div",{style:{padding:16}},
-          h(Eyebrow,null,"Après 6 mois"),
-          h("div",{style:{color:C.muted,fontSize:13,marginTop:7,lineHeight:1.55}},
-            "La reprise des sports pivots dépend des résultats des tests et de la validation médicale. La compétition n’est pas reprise avant 9 mois.")
+          h(Eyebrow,null,"À retenir"),
+          h("div",{style:{color:C.muted,fontSize:12.5,marginTop:7,lineHeight:1.55}},
+            "Ces critères structurent votre progression mais ne remplacent pas l’examen clinique. Les délais biologiques, votre évolution et les consignes du chirurgien ou du kinésithérapeute peuvent retarder une étape."
+          ),
+          h("div",{style:{color:C.muted,fontSize:12.5,marginTop:8,lineHeight:1.55}},
+            "Pour les sports pivots, la reprise se fait progressivement après les tests. La compétition n’est pas envisagée avant 9 mois."
+          ),
+          h("button",{onClick:()=>{
+            if(confirm("Réinitialiser votre suivi des objectifs ?")){
+              const z=emptyState();
+              setState(z); setOpen(1);
+              try{localStorage.removeItem("postop_goals_v2")}catch(e){}
+            }
+          },style:{marginTop:11,fontSize:11.5,color:C.muted,textDecoration:"underline"}},
+            "Réinitialiser le suivi des objectifs")
         )
-      ),
-      h("div",{style:{color:C.muted,fontSize:11.5,lineHeight:1.55,padding:"0 4px 8px"}},
-        "Ces objectifs sont des repères. Leur validation se fait avec votre médecin du sport ou le Dr Freychet selon votre évolution.")
+      )
     );
   };
 
