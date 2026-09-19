@@ -544,6 +544,7 @@ function App(){
    .filter(s => s[1].toLowerCase().includes(q.toLowerCase()))
    .sort((a,b)=>(a[0]??9999)-(b[0]??9999));
  const needPo = day>=0 && (po.suture===null||po.hbpm===null);
+ const FAQPanel = window.FAQPanel;
 
  /* ---------- Aujourd'hui ---------- */
  const Today=(
@@ -819,6 +820,9 @@ function App(){
    </Card>
   </div>);
 
+ /* ---------- FAQ ---------- */
+ const FAQ=(<FAQPanel C={C} Card={Card} Eyebrow={Eyebrow} IcSearch={IcSearch}/>);
+
  /* ---------- Infos ---------- */
  const Infos=(
   <div className="col" style={{gap:12}}>
@@ -921,7 +925,7 @@ function App(){
    </div></Card>
   </div>);
 
- const TABS=[["today","Aujourd'hui",IcCal],["list","Check-list",IcList],["meds","Traitement",IcPill],["sport","Sport",IcAct],["sos","Infos",IcInfo]];
+ const TABS=[["today","Aujourd'hui",IcCal],["list","Check-list",IcList],["meds","Traitement",IcPill],["sport","Sport",IcAct],["faq","FAQ",IcSearch],["sos","Infos",IcInfo]];
 
  return (
   <div style={{minHeight:"100vh",background:C.paper}}>
@@ -961,7 +965,7 @@ function App(){
    </div>
 
    <div className="safe" style={{padding:12}}>
-    {tab==="today"&&Today}{tab==="list"&&List}{tab==="meds"&&Meds}{tab==="sport"&&Sport}{tab==="sos"&&Infos}
+    {tab==="today"&&Today}{tab==="list"&&List}{tab==="meds"&&Meds}{tab==="sport"&&Sport}{tab==="faq"&&FAQ}{tab==="sos"&&Infos}
    </div>
 
    {/* Navigation */}
