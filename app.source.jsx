@@ -545,6 +545,8 @@ function App(){
    .sort((a,b)=>(a[0]??9999)-(b[0]??9999));
  const needPo = day>=0 && (po.suture===null||po.hbpm===null);
  const FAQPanel = window.FAQPanel;
+ const ObjectivesPanel = window.ObjectivesPanel;
+ const Post15TreatmentCard = window.Post15TreatmentCard;
 
  /* ---------- Aujourd'hui ---------- */
  const Today=(
@@ -623,6 +625,8 @@ function App(){
        </div>
       </Card>);
    })()}
+
+   {day>=15&&M&&<Post15TreatmentCard M={M} C={C} Card={Card} Eyebrow={Eyebrow}/>}
 
    {needPo&&(
     <Card style={{borderColor:C.amber,background:C.amberSoft}}>
@@ -780,6 +784,9 @@ function App(){
     </div></Card>)}
   </div>);
 
+ /* ---------- Objectifs ---------- */
+ const Objectives=(<ObjectivesPanel day={day} dateOp={dateOp} po={po} C={C} Card={Card} Eyebrow={Eyebrow} IcCheck={IcCheck} addD={addD} sh={sh}/>);
+
  /* ---------- Sport ---------- */
  const Sport=(
   <div className="col" style={{gap:12}}>
@@ -925,7 +932,7 @@ function App(){
    </div></Card>
   </div>);
 
- const TABS=[["today","Aujourd'hui",IcCal],["list","Check-list",IcList],["meds","Traitement",IcPill],["sport","Sport",IcAct],["faq","FAQ",IcSearch],["sos","Infos",IcInfo]];
+ const TABS=[["today","Aujourd'hui",IcCal],["list","Check-list",IcList],["meds",day<15?"Traitement":"Objectifs",day<15?IcPill:IcCheck],["sport","Sport",IcAct],["faq","FAQ",IcSearch],["sos","Infos",IcInfo]];
 
  return (
   <div style={{minHeight:"100vh",background:C.paper}}>
@@ -965,7 +972,7 @@ function App(){
    </div>
 
    <div className="safe" style={{padding:12}}>
-    {tab==="today"&&Today}{tab==="list"&&List}{tab==="meds"&&Meds}{tab==="sport"&&Sport}{tab==="faq"&&FAQ}{tab==="sos"&&Infos}
+    {tab==="today"&&Today}{tab==="list"&&List}{tab==="meds"&&(day<15?Meds:Objectives)}{tab==="sport"&&Sport}{tab==="faq"&&FAQ}{tab==="sos"&&Infos}
    </div>
 
    {/* Navigation */}
