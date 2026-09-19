@@ -2,11 +2,13 @@
    Met l'application en cache pour qu'elle fonctionne sans réseau.
    Incrémenter VERSION à chaque mise à jour du contenu. */
 
-const VERSION = "postop-v10-logo";
+const VERSION = "postop-v11-faq";
 const FILES = [
   "./",
   "./index.html",
-  "./app.js",
+  "./app.js?v=11",
+  "./faq-data.js?v=11",
+  "./faq-ui.js?v=11",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
@@ -14,8 +16,8 @@ const FILES = [
   "./santy.png",
   "./santy-white.png",
   "./gerland.png",
-  "./vendor/react.production.min.js",
-  "./vendor/react-dom.production.min.js"
+  "./react.production.min.js?v=11",
+  "./react-dom.production.min.js?v=11"
 ];
 
 self.addEventListener("install", (e) => {
